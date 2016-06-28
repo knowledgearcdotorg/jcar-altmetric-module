@@ -1,0 +1,4 @@
+id=jcar_altmetric
+src=.
+path.joomla=/var/www/html/
+package.extensions=
