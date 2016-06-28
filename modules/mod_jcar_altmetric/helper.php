@@ -12,11 +12,13 @@ class ModJCarAltmetricHelper
     {
         $id = null;
         $url = JURI::getInstance();
-        $router = JApplicationCms::getRouter();
-        $query = $router->parse($url);
+        $query = static::getQuery();
 
         if ($params->get('use_type', 'uri') == 'handle') {
-            if (ArrayHelper::getValue($query, 'option') == 'com_jcar' &&
+            if (ArrayHelper::getValue($query, 'option') == 'com_jspace' &&
+                ArrayHelper::getValue($query, 'view') == 'item') {
+                $id = static::getHandleLegacy();
+            } else if (ArrayHelper::getValue($query, 'option') == 'com_jcar' &&
                 ArrayHelper::getValue($query, 'view') == 'item') {
                 JModelLegacy::addIncludePath(JPATH_ROOT.'/components/com_jcar/models');
 
@@ -24,7 +26,7 @@ class ModJCarAltmetricHelper
 
                 $model->setProperties($params->get('jcar'));
 
-                $item = $model->getItem(ArrayHelper::getValue($query, 'id'));
+                $item = $model->getItem((int)ArrayHelper::getValue($query, 'id'));
 
                 $id = $item->handle;
             }
@@ -53,8 +55,25 @@ class ModJCarAltmetricHelper
         }
     }
 
-    private static function getButtonLegacy($params)
+    private static function getHandleLegacy()
     {
+        $query = static::getQuery();
 
+        JModelLegacy::addIncludePath(JPATH_ROOT.'/components/com_jspace/models');
+
+        $model = JModelLegacy::getInstance('Item', 'JSpaceModel');
+
+        $model->setItemId((int)ArrayHelper::getValue($query, 'id'));
+
+        $item = $model->getItem();
+        
+        return $item->dspaceGetRaw()->handle;
+    }
+
+    private static function getQuery()
+    {
+        $url = JURI::getInstance();
+        $router = JApplicationCms::getRouter();
+        return $router->parse($url);
     }
 }
