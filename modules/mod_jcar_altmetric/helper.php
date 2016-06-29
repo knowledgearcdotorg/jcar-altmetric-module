@@ -66,13 +66,14 @@ class ModJCarAltmetricHelper
         $model->setItemId((int)ArrayHelper::getValue($query, 'id'));
 
         $item = $model->getItem();
-        
+
         return $item->dspaceGetRaw()->handle;
     }
 
     private static function getQuery()
     {
-        $url = JURI::getInstance();
+        // copy the JUri object otherwise the router parse removes elements from the path.
+        $url = clone JURI::getInstance();
         $router = JApplicationCms::getRouter();
         return $router->parse($url);
     }
