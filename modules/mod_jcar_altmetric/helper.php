@@ -14,12 +14,18 @@ class ModJCarAltmetricHelper
         $url = JURI::getInstance();
         $query = static::getQuery();
 
+        $component = ArrayHelper::getValue($query, 'option');
+        $view = ArrayHelper::getValue($query, 'view');
+
+        if (array_search($component, array('com_jspace', 'com_jcar')) === false
+            || $view !== 'item') {
+            return "";
+        }
+
         if ($params->get('use_type', 'uri') == 'handle') {
-            if (ArrayHelper::getValue($query, 'option') == 'com_jspace' &&
-                ArrayHelper::getValue($query, 'view') == 'item') {
+            if ($component == 'com_jspace' && $view == 'item') {
                 $id = static::getHandleLegacy();
-            } else if (ArrayHelper::getValue($query, 'option') == 'com_jcar' &&
-                ArrayHelper::getValue($query, 'view') == 'item') {
+            } else if ($component == 'com_jcar') {
                 JModelLegacy::addIncludePath(JPATH_ROOT.'/components/com_jcar/models');
 
                 $model = JModelLegacy::getInstance('Item', 'JCarModel');
