@@ -41,6 +41,11 @@ class ModJCarAltmetricHelper
         }
 
         if ($id) {
+            // @HACK This can be removed when old com_jspace is no longer supported.
+            if ($component == 'com_jspace' && $view == 'item') {
+                static::addMetaDataLegacy();
+            }
+
             $context = 'com_jcar.item';
 
             $row = new stdClass();
@@ -82,5 +87,56 @@ class ModJCarAltmetricHelper
         $url = clone JURI::getInstance();
         $router = JApplicationCms::getRouter();
         return $router->parse($url);
+    }
+
+    private static function addMetaDataLegacy()
+    {
+        $query = static::getQuery();
+
+        JModelLegacy::addIncludePath(JPATH_ROOT.'/components/com_jspace/models');
+
+        $model = JModelLegacy::getInstance('Item', 'JSpaceModel');
+
+        $model->setItemId((int)ArrayHelper::getValue($query, 'id'));
+
+        $item = $model->getItem();
+
+        foreach ($item->getMetadataSet() as $key=>$metadata) {
+            $metadata->rewind();
+
+            switch ($key) {
+                case "dc.publisher":
+                    $name = "DC.publisher";
+                    break;
+
+                case "dc.title":
+                    $name = "DC.title";
+                    break;
+
+                case "dc.contributor.author":
+                    $name = "DC.author";
+                    break;
+
+                case "dc.date.issued":
+                    $name = "DC.issued";
+                    break;
+
+                default:
+                    $name = null;
+                    break;
+            }
+
+            if ($name) {
+                if (is_array($metadata)) {
+                    foreach ($metadata as $value) {
+                        JFactory::getDocument()->addCustomTag("<meta name=\"".$name."\" content=\"".(string)$value."\"/>");
+                    }
+                } else {
+                    JFactory::getDocument()->addCustomTag("<meta name=\"".$name."\" content=\"".(string)$metadata."\"/>");
+                }
+            }
+        }
+
+        JFactory::getDocument()->setMetaData("DC.identifier", "http://hdl.handle.net/".$item->dspaceGetRaw()->handle);
     }
 }
