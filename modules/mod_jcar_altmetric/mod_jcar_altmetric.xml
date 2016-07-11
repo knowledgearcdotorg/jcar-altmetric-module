@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="3.0" client="site" method="upgrade">
+<extension type="module" version="3.4" client="site" method="upgrade">
     <name>mod_jcar_altmetric</name>
     <creationDate>2016-06-27</creationDate>
     <author>KnowledgeArc</author>
@@ -49,6 +49,6 @@
 
 
     <updateservers>
-        <!--server type="extension" priority="1"><![CDATA[http://knowledgearc.org/index.php?option=com_ars&view=update&task=stream&format=xml&id=13&dummy=extension.xml]]></server-->
+        <server type="extension" priority="1" name="Altmetric Module for JCar">http://update.knowledgearc.org/joomla/extensions/mod_jcar_altmetric.xml</server>
     </updateservers>
 </extension>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<updates>
+    <update>
+        <name>Altmetric Module for JCar</name>
+        <description>Display the Altmetric badge alongside JCar items.</description>
+        <element>mod_jcar_altmetric</element>
+        <type>module</type>
+        <version>1.0.0-beta</version>
+        <client>site</client>
+        <infourl title="Altmetric Module for JCar">https://github.com/knowledgearcdotorg/jcar-altmetric-module/releases/tag/1.0.0-beta</infourl>
+        <downloads>
+            <downloadurl type="full" format="zip">https://github.com/knowledgearcdotorg/jcar-altmetric-module/releases/download/1.0.0-beta/mod_jcar_altmetric.zip</downloadurl>
+        </downloads>
+        <tags>
+            <tag>beta</tag>
+        </tags>
+        <targetplatform name="joomla" version="3.[456789]" />
+    </update>
+</updates>
